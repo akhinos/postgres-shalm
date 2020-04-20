@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-extension-job
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": "post-install,post-upgrade"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
+spec:
+  template:
+    metadata:
+      labels:
+        purpose: "postgresql-extension" 
+    spec:
+      restartPolicy: "OnFailure"
+      containers:
+        - name: enable-extension
+          image: postgres:12
+          command: ["psql", "-d", "{{ .Values.database }}", "-U", "{{ .Values.user }}", "-h", "{{ .Values.service }}", "-p", "{{ .Values.port }}", "-c", "CREATE EXTENSION citext;"]
+          env:
+            - name: "PGPASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: password
