@@ -1,3 +1,4 @@
+load("@ytt:base64", "base64")
 def init(self):
   self.team = "c21s"
   self.clusterName = "postgresql"
@@ -26,8 +27,8 @@ def get_user(self):
 
 def get_password(self, k8s):
   secret = k8s.get(kind="Secret", name=self.secretName,namespaced=True, namespace=self.namespace)
-  #TODO: needs base64 decoding
-  return secret
+  password = base64.decode(secret.data.password)
+  return password
 
-def get_name(self):
-  return self.deploymentName
+def get_database(self):
+  return self.database
