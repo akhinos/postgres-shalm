@@ -5,7 +5,7 @@ def init(self):
   self.deploymentName = "{}-{}".format(self.team, self.clusterName)
   self.user = "ccdbuser"
   self.database = "ccdb"
-  self.secretName = "{user}.{team}-{clusterName}.credentials.postgresql.acid.zalan.do".format(user=self.user, team=self.team, clusterName = self.clusterName)
+  self.secretName = "{user}.{team}-{clusterName}.credentials".format(user=self.user, team=self.team, clusterName = self.clusterName)
   self.service = "{}.{}.svc.cluster.local".format(self.deploymentName, self.namespace )
   self.port = 5432
 
