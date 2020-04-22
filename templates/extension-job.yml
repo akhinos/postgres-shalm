@@ -13,7 +13,7 @@ spec:
       containers:
         - name: enable-extension
           image: postgres:12
-          command: ["psql", "-d", "{{ .Values.database }}", "-U", "{{ .Values.user }}", "-h", "{{ .Values.service }}", "-p", "{{ .Values.port }}", "-c", "CREATE EXTENSION citext;"]
+          command: ["psql", "-d", "{{ .Values.database }}", "-U", "{{ .Values.user }}", "-h", "{{ .Values.service }}", "-p", "{{ .Values.port }}", "-c", "CREATE EXTENSION IF NOT EXISTS citext;"]
           env:
             - name: "PGPASSWORD"
               valueFrom:
