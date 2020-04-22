@@ -10,6 +10,7 @@ def init(self):
   self.port = 5432
 
 def apply(self,k8s):
+  k8s.delete(kind="Job",name="postgresql-extension-job", ignore_not_found=True, timeout=60, namespace=self.namespace, namespaced=True)
   self.__apply(k8s)
   k8s.wait(kind="Job",name="postgresql-extension-job",condition="condition=Complete", timeout=180, namespace=self.namespace, namespaced=True)
 
