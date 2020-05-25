@@ -11,12 +11,14 @@ spec:
     spec:
       restartPolicy: "OnFailure"
       containers:
-        - name: enable-extension
+        #@ for database, user in self.databases.items():
+        - name: #@ database + "-enable-extension"
           image: postgres:12
-          command: #@ [ "psql", "-d", self.database, "-U", self.user, "-h",self.service, "-p", str(self.port) , "-c", "CREATE EXTENSION IF NOT EXISTS citext;"]
+          command: #@ [ "psql", "-d", database, "-U", user, "-h",self.service, "-p", str(self.port) , "-c", "CREATE EXTENSION IF NOT EXISTS citext;"]
           env:
             - name: "PGPASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: #@ self.secretName
+                  name: #@ self.secret_name(database)
                   key: password
+        #@ end
