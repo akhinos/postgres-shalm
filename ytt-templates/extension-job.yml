@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: postgresql-extension-job
-  namespace: {{ .Release.Namespace }}
+  namespace: #@ self.namespace
 spec:
   template:
     metadata:
@@ -13,10 +13,10 @@ spec:
       containers:
         - name: enable-extension
           image: postgres:12
-          command: ["psql", "-d", "{{ .Values.database }}", "-U", "{{ .Values.user }}", "-h", "{{ .Values.service }}", "-p", "{{ .Values.port }}", "-c", "CREATE EXTENSION IF NOT EXISTS citext;"]
+          command: #@ [ "psql", "-d", self.database, "-U", self.user, "-h",self.service, "-p", str(self.port) , "-c", "CREATE EXTENSION IF NOT EXISTS citext;"]
           env:
             - name: "PGPASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.secretName }}
+                  name: #@ self.secretName
                   key: password

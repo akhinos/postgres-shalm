@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ self.namespace
+---
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: #@ self.deploymentName
+  namespace: #@ self.namespace
+spec:
+  teamId: "c21s"
+  volume:
+    size: 1Gi
+  numberOfInstances: 2
+  users: #@ { self.user : ["superuser", "createdb"]}
+  databases: #@ { self.database : self.user }
+  postgresql:
+    version: "12"
+#!  tls:
+#!    secretName: #@ self.cert.name
+#!    certificateFile: "tls.crt"
+#!    privateKeyFile: "tls.key"
+#!    caFile: "ca.crt"
+#!    caSecretName: #@ self.ca.name
+#!  spiloFSGroup: 103
+  
