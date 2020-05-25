@@ -6,8 +6,8 @@ def init(self):
   self.service = "{}.{}.svc.cluster.local".format(self.deploymentName, self.namespace )
   self.port = 5432
   self.databases = {}
-  self.ca = certificate("ca",is_ca=True)
-  self.cert = certificate("cert",signer=self.ca,domains=["*.postgres.default.svc.cluster.local" ])
+  #self.ca = certificate("ca",is_ca=True)
+  #self.cert = certificate("cert",signer=self.ca,domains=["*.postgres.default.svc.cluster.local" ])
 
 def apply(self,k8s):
   k8s.delete(kind="Job",name="postgresql-extension-job", ignore_not_found=True, timeout=60, namespace=self.namespace, namespaced=True)
