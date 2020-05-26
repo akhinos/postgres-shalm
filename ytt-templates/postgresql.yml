@@ -23,13 +23,12 @@ spec:
   databases: #@ databases
   postgresql:
     version: "12"
-  #@ if self.ca:
+  #@ if self.cert != None:
   tls:
     secretName: #@ self.cert.name
     certificateFile: "tls.crt"
     privateKeyFile: "tls.key"
     caFile: "ca.crt"
-    #! caSecretName: #@ self.ca.name
   spiloFSGroup: 103
   #@ end
   
