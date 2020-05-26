@@ -1,13 +1,14 @@
 load("@ytt:base64", "base64")
-def init(self):
+def init(self, ca=None):
   self.team = "c21s"
   self.clusterName = "postgresql"
   self.deploymentName = "{}-{}".format(self.team, self.clusterName)
   self.service = "{}.{}.svc.cluster.local".format(self.deploymentName, self.namespace )
   self.port = 5432
   self.databases = {}
-  #self.ca = certificate("ca",is_ca=True)
-  #self.cert = certificate("cert",signer=self.ca,domains=["*.postgres.default.svc.cluster.local" ])
+  self.ca = ca 
+  if self.ca:
+    self.cert = certificate("cert",signer=self.ca,domains=self.service)
 
 def apply(self,k8s):
   k8s.delete(kind="Job",name="postgresql-extension-job", ignore_not_found=True, timeout=60, namespace=self.namespace, namespaced=True)
